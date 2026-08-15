@@ -1,39 +1,26 @@
 volumes:
   pc:
-    # bootloader configuration is shipped and managed by snapd
     bootloader: grub
-    schema: gpt
     structure:
-      - name: EFI System partition
-        role: system-seed-null
+      - name: EFI System
+        type: EF,C12A7328-F81F-11D2-BA4B-00A0C93EC93B
         filesystem: vfat
-        type: C12A7328-F81F-11D2-BA4B-00A0C93EC93B
-        size: 750M
-        offset: 1M
-        update:
-          edition: 2
+        filesystem-label: system-boot
+        size: 50M
         content:
-          - source: grubx64.efi
-            target: EFI/boot/grubx64.efi
           - source: shim.efi.signed
             target: EFI/boot/bootx64.efi
-      - name: ubuntu-boot
-        role: system-boot
-        filesystem: ext4
-        type: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
-        size: 750M
-        update:
-          edition: 1
-        content:
+          - source: fbx64.efi
+            target: EFI/boot/fbx64.efi
+          - source: mmx64.efi
+            target: EFI/boot/mmx64.efi
+          - source: grub.cfg
+            target: EFI/ubuntu/grub.cfg
+          - source: shim.efi.signed
+            target: EFI/ubuntu/shimx64.efi
           - source: grubx64.efi
-            target: EFI/boot/grubx64.efi
-      - name: ubuntu-save
-        role: system-save
-        filesystem: ext4
-        type: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
-        size: 32M
-      - name: ubuntu-data
-        role: system-data
-        filesystem: ext4
-        type: 0FC63DAF-8483-4772-8E79-3D69D8477DE4
-        size: 4G
+            target: EFI/ubuntu/grubx64.efi
+          - source: mmx64.efi
+            target: EFI/ubuntu/mmx64.efi
+          - source: BOOTX64.CSV
+            target: EFI/ubuntu/BOOTX64.CSV
