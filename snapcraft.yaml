@@ -1,5 +1,4 @@
 name: pc
-adopt-info: pc
 version: '24.04-1'
 type: gadget
 base: core22
