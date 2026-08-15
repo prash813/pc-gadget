@@ -10,24 +10,17 @@ confinement: strict
 grade: stable
 
 parts:
-  boot:
+  grub-prepare:
     plugin: nil
     stage-packages:
       - grub-efi-amd64-signed
+      - grub-pc-bin
       - shim-signed
-    override-build: |
-      set -x
-      # grub.conf lets snapd identify grub as the bootloader on boot
-      install -m 644 /dev/null "$CRAFT_PART_INSTALL"/grub.conf
-    organize:
-      usr/lib/shim/shimx64.efi.dualsigned: shim.efi.signed
-      usr/lib/grub/x86_64-efi-signed/grubx64.efi.signed: grubx64.efi
-    prime:
-      - shim.efi.signed
-      - grubx64.efi
-      - grub.conf
-      - usr/share/doc/shim-signed
-      - usr/share/doc/grub-efi-amd64-signed
-  cmdline:
-    plugin: dump
-    source: dump
+    prime: [ -* ]
+
+  grub:
+    source: .
+    build-packages:
+      - grub-common
+    plugin: make
+    after: [grub-prepare]
